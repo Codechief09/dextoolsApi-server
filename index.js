@@ -12,6 +12,7 @@ const { addToBlacklist } = require("./helpers/database");
 
 let transactions = {};
 let tmp = {};
+let sendMessageTokenAdress = "";
 const THRESHOLD = 6000; // 6 seconds
 const TRANSACTIONS = 6; // 6 transactions
 const apiKey = env.ETHERSCAN_API_KEY;
@@ -130,14 +131,20 @@ const start = async () => {
 				if (transactionCount >= TRANSACTIONS) {
 					if (deltaTime <= THRESHOLD) {
 						const ownerAdress = await getOwnerAdress(contractAddress);
-						await sendMessage(
-							transactions[tokenAddress],
-							provider,
-							tokenAddress,
-							deltaTime,
-							transactionCount,
-							ownerAdress
-						);
+						if(sendMessageTokenAdress != tokenAddress) {
+							await sendMessage(
+								transactions[tokenAddress],
+								provider,
+								tokenAddress,
+								deltaTime,
+								transactionCount,
+								ownerAdress
+							);
+							sendMessageTokenAdress = tokenAddress;
+							setTimeout(() => {
+								sendMessageTokenAdress = "";
+							}, 1200000);
+						}
 						time(startTime);
 						transactions[tokenAddress] = [];
 						tmp[tokenAddress] = [];

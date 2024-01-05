@@ -3,6 +3,7 @@ const url = require("url");
 const jwt = require("jsonwebtoken");
 const spawn = require("child_process").spawn;
 const path = require("path");
+const { addToBlacklist } = require("./helpers/database");
 
 let serviceProcess = null;
 
@@ -28,7 +29,7 @@ const server = http.createServer((req, res) => {
 	};
 
 	// Set CORS headers
-	res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+	res.setHeader("Access-Control-Allow-Origin", "http://mytransactionbot.com");
 	res.setHeader("Access-Control-Allow-Methods", "POST");
 	res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -46,20 +47,18 @@ const server = http.createServer((req, res) => {
 				const data = JSON.parse(body);
 
 				if (
-					data.email == "personal.codemaker@gmail.com" &&
-					data.password == "aaaaaa"
+					data.email == "whaleundercover@gmail.com" &&
+					data.password == "Whaleundercover1"
 				) {
 					const secretKey = "abcdefg12345ABCDZZXC!@#";
 					const payload = {
-						email: "personal.codemaker@gmail.com",
-						password: "aaaaaa",
+						email: "whaleundercover@gmail.com",
+						password: "Whaleundercover1",
 					};
 					const options = {
 						expiresIn: "1h",
 					};
 					const token = jwt.sign(payload, secretKey, options);
-
-					console.log("token", token);
 
 					res.writeHead(200, { "Content-Type": "application/json" });
 					res.end(
@@ -96,6 +95,12 @@ const server = http.createServer((req, res) => {
 				} else if (data.status == "Stop") {
 					console.log("Stoped");
 					await serviceEnd();
+					res.writeHead(200, { "Content-Type": "application/json" });
+					res.end(JSON.stringify({ message: "Success" }));
+				} else if (data.status == "AddBlackList") {
+					console.log("add token adress in blacklist");
+					//add token adress in blacklist
+					addToBlacklist(data.tokenAdress);
 					res.writeHead(200, { "Content-Type": "application/json" });
 					res.end(JSON.stringify({ message: "Success" }));
 				} else {
