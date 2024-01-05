@@ -4,6 +4,12 @@
   "blacklist": [
     {
       "address": "0x7d8146cf21e8d7cbe46054e01588207b51198729"
+    },
+    {
+      "address": "0x7d8146cf21e8d7cbe46054e01588207b51198720"
+    },
+    {
+      "address": ""
     }
   ]
 }

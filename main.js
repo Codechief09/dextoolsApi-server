@@ -100,9 +100,11 @@ const server = http.createServer((req, res) => {
 				} else if (data.status == "AddBlackList") {
 					console.log("add token adress in blacklist");
 					//add token adress in blacklist
-					addToBlacklist(data.tokenAdress);
-					res.writeHead(200, { "Content-Type": "application/json" });
-					res.end(JSON.stringify({ message: "Success" }));
+					if (blackListTokenAdress !== "" && blackListTokenAdress.length === 42) {
+						addToBlacklist(data.tokenAdress);
+						res.writeHead(200, { "Content-Type": "application/json" });
+						res.end(JSON.stringify({ message: "Success" }));
+					}
 				} else {
 					console.log("Faild");
 					res.end(JSON.stringify({ message: "Faild" }));
